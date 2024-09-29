@@ -1,8 +1,8 @@
 title:       "RUVTuber Space"
 header_title: "Пространство русскоговорящих виртуальных ютуберов"
 description: "Веб-сайт открытых данных о русскоговорящих виртуальных ютуберах"
-baseurl:     "/ruvtuber.space"
-url:         "https://paulvonlecter.github.io"
+baseurl:     "/"
+url:         "https://ruvtspace.github.io"
 date_format: "%-d.%m.%Y"
 encoding: utf-8
 exclude: ["Gemfile", "Gemfile.lock", "node_modules", "vendor/", "vendor/bundle/", "vendor/cache/", "vendor/gems/", "vendor/ruby/", ".gitignore", "composer.json", "composer.lock", "prepare.php", "LICENSE", "README.md", "_scripts/"]
