@@ -7,13 +7,30 @@
 // Установка временной зоны
 date_default_timezone_set('Europe/Moscow');
 
-// Настройка окружения
-if(getenv('GS_URL'))                define('GS_URL', getenv('GS_URL'));
-if(getenv('VK_CLIENT_ID'))          define('VK_CLIENT_ID', getenv('VK_CLIENT_ID'));
-if(getenv('VK_SERVICE_TOKEN'))      define('VK_ACCESS_TOKEN', getenv('VK_SERVICE_TOKEN'));
-if(getenv('TWITCH_CLIENT_ID'))      define('TWITCH_CLIENT_ID', getenv('TWITCH_CLIENT_ID'));
-if(getenv('TWITCH_CLIENT_SECRET'))  define('TWITCH_CLIENT_SECRET', getenv('TWITCH_CLIENT_SECRET'));
-if(getenv('YT_API_KEY'))            define('YT_API_KEY', getenv('YT_API_KEY'));
+// Проверка на наличие среды разработки
+if(file_exists('.env')) {
+    $lines = file('.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        // Не обрабатывать пустые строки
+        if(trim($line) == '') continue;
+        // Не обрабатывать комментарии
+        if (strpos(trim($line), '#') === 0) continue;
+        // Разбить пополам
+        list($name, $value) = explode('=', $line, 2);
+        $name = trim($name);
+        $value = trim($value);
+        // Задать константу окружения
+        define($name, $value);
+    }
+} else {
+    // Настройка окружения
+    if(getenv('GS_URL'))                define('GS_URL', getenv('GS_URL'));
+    if(getenv('VK_CLIENT_ID'))          define('VK_CLIENT_ID', getenv('VK_CLIENT_ID'));
+    if(getenv('VK_SERVICE_TOKEN'))      define('VK_ACCESS_TOKEN', getenv('VK_SERVICE_TOKEN'));
+    if(getenv('TWITCH_CLIENT_ID'))      define('TWITCH_CLIENT_ID', getenv('TWITCH_CLIENT_ID'));
+    if(getenv('TWITCH_CLIENT_SECRET'))  define('TWITCH_CLIENT_SECRET', getenv('TWITCH_CLIENT_SECRET'));
+    if(getenv('YT_API_KEY'))            define('YT_API_KEY', getenv('YT_API_KEY'));
+}
 
 // Проверка на целостность окружения
 if(
@@ -46,9 +63,9 @@ $vk = new VK\Client\VKApiClient();
 function twitchToken($client_id, $client_secret) {
     $ch = curl_init('https://id.twitch.tv/oauth2/token');
     $data = array(
-        "client_secret" => $client_secret,
-        "client_id" => $client_id,
-        "grant_type" => "client_credentials"
+        'client_secret' => $client_secret,
+        'client_id' => $client_id,
+        'grant_type' => 'client_credentials'
     );
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -343,4 +360,3 @@ $db->exec("CREATE TABLE 'vtubers'
     )
 ");
 */
-

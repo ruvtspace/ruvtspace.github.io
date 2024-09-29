@@ -3,6 +3,7 @@ _posts/
 .sass-cache/
 .jekyll-cache/
 .jekyll-metadata
+.env
 autoload.php
 composer.lock
 composer.phar
