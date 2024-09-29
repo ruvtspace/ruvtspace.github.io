@@ -1,0 +1,12 @@
+_site/
+_posts/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+autoload.php
+composer.lock
+composer.phar
+vendor/
+vtubers/*
+!vtubers/index.html
+/_data/vtubers.json
