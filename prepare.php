@@ -214,7 +214,7 @@ class ChannelInfo {
         $ch = curl_init('https://api.twitch.tv/helix/users?login='.$this->name);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Authorization: Bearer '.TWITCH_TOKEN,
-            'Client-Id: '.getenv('TWITCH_CLIENT_ID')
+            'Client-Id: '.TWITCH_CLIENT_ID
         ]);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $json = curl_exec($ch);
@@ -251,8 +251,9 @@ class ChannelInfo {
             ])[0];
             file_put_contents($this->folder.'/vk.json', json_encode($group, JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_NUMERIC_CHECK));
             // Именование
-            $this->name = $group['name'];
-            $this->description = $group['description'];
+            $this->name = isset($group['name'])?$group['name']:'';
+            // Может быть пустым
+            $this->description = isset($group['description'])?$group['description']:'';
             // Скачать аватар группы
             if(isset($group['photo_200']))
                 file_put_contents($this->folder.'/vk_icon.jpg', file_get_contents($group['photo_200']));
@@ -309,7 +310,7 @@ foreach ($GSDATA as $value) {
         && !isset($vtuber->vk)
     ) continue;
     // Выбор главной картинки
-    if(isset($value[7]) && !empty($value[7])) {
+    if(isset($value[7]) && !empty(trim($value[7]))) {
         copy("$vtuber_folder/{$value[7]}_icon.jpg", "$vtuber_folder/main_icon.jpg");
     } else {
         if (isset($vtuber->youtube->icon)) copy("$vtuber_folder/youtube_icon.jpg", "$vtuber_folder/main_icon.jpg");
